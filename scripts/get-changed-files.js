@@ -14,16 +14,17 @@
 
 const childProcess = require('child_process');
 const minimatch = require('minimatch');
+const yargs = require('yargs');
 
-const filter = process.argv[2];
-const command = process.argv.slice(3);
+const filter = yargs.argv.filter;
+const command = yargs.argv.command;
 const files = getFilteredChanges(filter);
 
 runCommandOnChangedFiles(command, files);
 
 function runCommandOnChangedFiles(command, files) {
   if (files.length) {
-    childProcess.spawn('npx', ['-q', ...command, ...files], { stdio: 'inherit' });
+    childProcess.spawn('npx', ['-q', ...command.split(' '), ...files], { stdio: 'inherit' });
   }
 }
 
